@@ -112,7 +112,11 @@ func GetFilteredProperties(allProperties []models.RentalPropertiesDTO, filter *m
 
 	// if limit is provided and valid then response will be sent in that way
 	if filter.Limit != nil && *filter.Limit < len(items) {
-		items = items[:*filter.Limit]
+		limited := make([]models.PropertyResponseDTO, 0, *filter.Limit)
+		for i := 0; i < *filter.Limit; i++ {
+			limited = append(limited, items[i])
+		}
+		items = limited
 	}
 
 	// final result
@@ -120,4 +124,15 @@ func GetFilteredProperties(allProperties []models.RentalPropertiesDTO, filter *m
 		Count: totalCount,
 		Items: items,
 	}
+}
+
+// Get A  Property By Property ID
+func GetAPropertyByID(properties []models.RentalPropertiesDTO, id string) (*models.PropertyResponseDTO, bool) {
+	for i := range properties {
+		if properties[i].ID == id {
+			resp := toResponse(&properties[i])
+			return &resp, true
+		}
+	}
+	return nil, false
 }

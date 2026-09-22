@@ -37,4 +37,25 @@ func (p *PropertyController) GetAllProperties() {
 // get a single property controller without filter option
 func (p *PropertyController) GetAProperty() {
 
+	// get id params from request
+	id := p.Ctx.Input.Param(":id")
+	if id == "" {
+		utils.JsonError(&p.Controller, 400, map[string]interface{}{"Errors :": "id is not provided"})
+		return
+	}
+
+	// get property store
+	store, err := services.GetPropertyStore()
+	if err != nil {
+		utils.JsonError(&p.Controller, 500, map[string]interface{}{"Errors ": "failed to load property data"})
+		return
+	}
+
+	// go to service layer and find property
+	property, found := services.GetAPropertyByID(store.GetData(), id)
+	if !found {
+		utils.JsonError(&p.Controller, 404, map[string]interface{}{"Errors ": "property not found"})
+		return
+	}
+	utils.JsonSuccess(&p.Controller, 200, models.PropertySingleResponse{Result: *property})
 }

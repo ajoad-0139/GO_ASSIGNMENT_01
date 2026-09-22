@@ -45,7 +45,6 @@ type ImageInfo struct {
 	Images []string `json:"Images"`
 }
 
-// List-wrapper types for GET /v1/properties
 type PropertyListResponse struct {
 	Result PropertyResult `json:"Result"`
 }
@@ -53,4 +52,8 @@ type PropertyListResponse struct {
 type PropertyResult struct {
 	Count int                   `json:"Count"`
 	Items []PropertyResponseDTO `json:"Items"`
+}
+
+type PropertySingleResponse struct {
+	Result PropertyResponseDTO `json:"result"`
 }
