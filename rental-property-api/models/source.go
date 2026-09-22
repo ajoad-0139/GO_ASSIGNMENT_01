@@ -23,6 +23,7 @@ type RentalPropertiesDTO struct {
 	AmenityCategories  []string `json:"amenity_categories"`
 	LonLat             LonLat   `json:"lonlat"`     // created a new type for nested key-value
 	Categories         string   `json:"categories"` //this field must be parsed as soon as the data is loaded in the memory
+	Breadcrumbs        []string `json:"-"`
 	Published          bool     `json:"published"`
 	Images             []string `json:"images"`
 }
@@ -30,4 +31,13 @@ type RentalPropertiesDTO struct {
 // Nested key-value type
 type LonLat struct {
 	Coordinates []float64 `json:"coordinates"`
+}
+
+// for parcing categoris field and store in breadcrumbs
+type CategoryEntry struct {
+	LocationID string   `json:"LocationID"`
+	Name       string   `json:"Name"`
+	Type       string   `json:"Type"`
+	Slug       string   `json:"Slug"`
+	Display    []string `json:"Display"`
 }

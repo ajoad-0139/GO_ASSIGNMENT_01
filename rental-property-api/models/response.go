@@ -1,6 +1,6 @@
 package models
 
-type PropertyResponse struct {
+type PropertyResponseDTO struct {
 	ID        string       `json:"ID"`
 	Feed      int          `json:"Feed"`
 	Published bool         `json:"Published"`
@@ -51,6 +51,6 @@ type PropertyListResponse struct {
 }
 
 type PropertyResult struct {
-	Count int                `json:"Count"`
-	Items []PropertyResponse `json:"Items"`
+	Count int                   `json:"Count"`
+	Items []PropertyResponseDTO `json:"Items"`
 }

@@ -2,10 +2,11 @@ package services
 
 import (
 	"encoding/json"
-	"github.com/beego/beego/v2/core/logs"
-	"github.com/beego/beego/v2/server/web"
 	"os"
 	"rental-property-api/models"
+
+	"github.com/beego/beego/v2/core/logs"
+	"github.com/beego/beego/v2/server/web"
 )
 
 type propertyStore struct {
@@ -40,10 +41,30 @@ func LoadData() error {
 	// parse  raw json data on struct instance
 	var parsedData []models.RentalPropertiesDTO
 
-	parseErr := json.Unmarshal(rawData, &parsedData)
+	parseErr := json.Unmarshal([]byte(rawData), &parsedData)
 	if parseErr != nil {
 		logs.Error("failed to parse raw json data : %v", err)
 		return err
+	}
+
+	// before loading the parsed data , categories field need to be parsed at load time to avoid redundancy
+	for i := range parsedData {
+		if parsedData[i].Categories == "" {
+			continue
+		}
+
+		var categoryEntries []models.CategoryEntry
+		err := json.Unmarshal([]byte(parsedData[i].Categories), &categoryEntries)
+		if err != nil {
+			logs.Error("failed to parse categories for id %s: %v", parsedData[i].ID, err)
+			continue
+		}
+
+		breadcrumbs := make([]string, 0, len(categoryEntries))
+		for _, entry := range categoryEntries {
+			breadcrumbs = append(breadcrumbs, entry.Name)
+		}
+		parsedData[i].Breadcrumbs = breadcrumbs
 	}
 
 	// load data on memory
