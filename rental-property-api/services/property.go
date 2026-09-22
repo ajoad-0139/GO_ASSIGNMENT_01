@@ -23,18 +23,18 @@ func LoadData() error {
 
 	// check if path is valid or not
 	if err != nil {
-		logs.Critical("sourcepath is not configured in app.conf")
+		logs.Critical("Error : sourcepath is not configured in app.conf")
 		return err
 	}
 	if sourcePath == "" {
-		logs.Critical("sourcepath is not configured in app.conf")
+		logs.Critical("Error : sourcepath is not configured in app.conf")
 		return err
 	}
 
 	// read raw data using the source file path
 	rawData, err := os.ReadFile(sourcePath)
 	if err != nil {
-		logs.Error("failed to read sourcefile %v", err)
+		logs.Error("Error : failed to read sourcefile %v", err)
 		return err
 	}
 
@@ -43,7 +43,7 @@ func LoadData() error {
 
 	parseErr := json.Unmarshal([]byte(rawData), &parsedData)
 	if parseErr != nil {
-		logs.Error("failed to parse raw json data : %v", err)
+		logs.Error("Error : failed to parse raw json data : %v", err)
 		return err
 	}
 
@@ -56,7 +56,7 @@ func LoadData() error {
 		var categoryEntries []models.CategoryEntry
 		err := json.Unmarshal([]byte(parsedData[i].Categories), &categoryEntries)
 		if err != nil {
-			logs.Error("failed to parse categories for id %s: %v", parsedData[i].ID, err)
+			logs.Error("Error : failed to parse categories for id %s: %v", parsedData[i].ID, err)
 			continue
 		}
 
@@ -90,4 +90,34 @@ func GetPropertyStore() (*propertyStore, error) {
 // Get data from property store
 func (p *propertyStore) GetData() []models.RentalPropertiesDTO {
 	return p.data
+}
+
+// Get all filtered properties
+func GetFilteredProperties(allProperties []models.RentalPropertiesDTO, filter *models.PropertyFilter) models.PropertyResult {
+	// here properties are filtered according to filter
+	matched := make([]*models.RentalPropertiesDTO, 0)
+	for i := range allProperties {
+		if matchesFilter(&allProperties[i], filter) {
+			matched = append(matched, &allProperties[i])
+		}
+	}
+
+	// transform matched items structure
+	items := make([]models.PropertyResponseDTO, 0, len(matched))
+	for _, p := range matched {
+		items = append(items, toResponse(p))
+	}
+
+	totalCount := len(items)
+
+	// if limit is provided and valid then response will be sent in that way
+	if filter.Limit != nil && *filter.Limit < len(items) {
+		items = items[:*filter.Limit]
+	}
+
+	// final result
+	return models.PropertyResult{
+		Count: totalCount,
+		Items: items,
+	}
 }

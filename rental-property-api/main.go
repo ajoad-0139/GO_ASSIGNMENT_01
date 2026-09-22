@@ -14,7 +14,7 @@ func main() {
 	// load data before starting the app
 	err := services.LoadData()
 	if err != nil {
-		logs.Critical("Failed to load data %v", err)
+		logs.Critical("Error : Failed to load data %v", err)
 		panic(err)
 	}
 
