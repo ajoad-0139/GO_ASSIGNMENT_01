@@ -12,6 +12,7 @@ data loaded from a local JSON file into memory at startup.
 
 ```bash
 git clone <https://github.com/ajoad-0139/GO_ASSIGNMENT_01.git>
+cd GO_ASSIGNMENT_01
 cd rental-property-api
 go mod tidy
 ```
