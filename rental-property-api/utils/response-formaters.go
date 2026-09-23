@@ -4,6 +4,9 @@ import (
 	"github.com/beego/beego/v2/server/web"
 )
 
+// reusable response formaters
+
+// error response
 func JsonError(c *web.Controller, status int, err interface{}) {
 	c.Data["json"] = map[string]interface{}{
 		"errors": err,
@@ -12,6 +15,7 @@ func JsonError(c *web.Controller, status int, err interface{}) {
 	c.ServeJSON()
 }
 
+// success response
 func JsonSuccess(c *web.Controller, status int, data interface{}) {
 	c.Data["json"] = data
 	c.Ctx.Output.SetStatus(status)

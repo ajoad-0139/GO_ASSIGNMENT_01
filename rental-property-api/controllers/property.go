@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"github.com/beego/beego/v2/server/web"
 	"rental-property-api/models"
 	"rental-property-api/services"
 	"rental-property-api/utils"
 	"rental-property-api/validators"
+
+	"github.com/beego/beego/v2/server/web"
 )
 
 type PropertyController struct {
@@ -57,5 +58,5 @@ func (p *PropertyController) GetAProperty() {
 		utils.JsonError(&p.Controller, 404, map[string]interface{}{"Errors ": "property not found"})
 		return
 	}
-	utils.JsonSuccess(&p.Controller, 200, models.PropertySingleResponse{Result: *property})
+	utils.JsonSuccess(&p.Controller, 200, *property)
 }

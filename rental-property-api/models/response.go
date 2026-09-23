@@ -53,7 +53,3 @@ type PropertyResult struct {
 	Count int                   `json:"Count"`
 	Items []PropertyResponseDTO `json:"Items"`
 }
-
-type PropertySingleResponse struct {
-	Result PropertyResponseDTO `json:"result"`
-}
