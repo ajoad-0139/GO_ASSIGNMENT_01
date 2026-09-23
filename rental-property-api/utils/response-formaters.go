@@ -9,7 +9,7 @@ import (
 // error response
 func JsonError(c *web.Controller, status int, err interface{}) {
 	c.Data["json"] = map[string]interface{}{
-		"errors": err,
+		"Error": err,
 	}
 	c.Ctx.Output.SetStatus(status)
 	c.ServeJSON()
