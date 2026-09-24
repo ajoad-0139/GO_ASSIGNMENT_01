@@ -117,6 +117,9 @@ func GetFilteredProperties(allProperties []models.RentalPropertiesDTO, filter *m
 			limited = append(limited, items[i])
 		}
 		items = limited
+		if *filter.Limit >= 0 && *filter.Limit < totalCount {
+			totalCount = *filter.Limit
+		}
 	}
 
 	// final result

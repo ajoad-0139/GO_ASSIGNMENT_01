@@ -310,7 +310,7 @@ func TestGetFilteredPropertiesAnd(t *testing.T) {
 				Limit: intPtr(2),
 			},
 			wantIDs:   []string{"p1", "p2"},
-			wantCount: 4,
+			wantCount: 2,
 		},
 	}
 
