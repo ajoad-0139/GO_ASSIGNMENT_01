@@ -13,7 +13,23 @@ type PropertyController struct {
 	web.Controller
 }
 
-// get all properties controller, handles filter options
+// @Title Get All Properties
+// @Description Returns a filtered list of rental properties. All query params are optional and can be combined.
+// @Param   min_price         query   string  false   "Minimum price (USD)"
+// @Param   max_price         query   string  false   "Maximum price (USD)"
+// @Param   min_star_rating   query   int     false   "Minimum star rating"
+// @Param   min_review_score  query   string  false   "Minimum review score"
+// @Param   min_reviews       query   int     false   "Minimum number of reviews"
+// @Param   published         query   bool    false   "Filter by published status"
+// @Param   property_type     query   string  false   "One of Hotel, House, Apartment, Villa, Resort, Hostel"
+// @Param   feed              query   int     false   "One of 11, 12, 22, 24"
+// @Param   min_bedroom       query   int     false   "Minimum number of bedrooms"
+// @Param   amenities         query   string  false   "Comma-separated list, e.g. wifi,pool"
+// @Param   limit             query   int     false   "Maximum number of results to return"
+// @Success 200 {object} models.PropertyListResponse
+// @Failure 400 invalid query parameter(s), see the Error field for details
+// @Failure 500 failed to load property data
+// @router / [get]
 func (p *PropertyController) GetAllProperties() {
 
 	// checking and parsing test on filters
@@ -35,7 +51,13 @@ func (p *PropertyController) GetAllProperties() {
 	utils.JsonSuccess(&p.Controller, 200, models.PropertyListResponse{Result: result})
 }
 
-// get a single property controller without filter option
+// @Title Get A Property
+// @Description Returns one rental property matching the given ID.
+// @Param   id   path   string  true   "Property ID"
+// @Success 200 {object} models.PropertyResponseDTO
+// @Failure 400 id is not provided
+// @Failure 404 property not found
+// @router /:id [get]
 func (p *PropertyController) GetAProperty() {
 
 	// get id params from request

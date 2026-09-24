@@ -31,6 +31,7 @@ runmode = dev
 sourcepath = "data/rental_properties.json"
 copyrequestbody = true
 autorender = false
+EnableDocs = true
 ```
 
 ## Run
@@ -54,6 +55,13 @@ to in `conf/app.conf`).
 cd services
 go test ./... -v
 go vet ./...
+```
+
+## Swagger Documentation
+
+**Match port number as App.config**
+```bash
+    "http://localhost:3000/swagger/index.html"
 ```
 
 ## Sample curl Commands

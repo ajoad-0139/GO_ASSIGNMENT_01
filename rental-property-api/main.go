@@ -25,5 +25,11 @@ func main() {
 		panic(err)
 	}
 
+	// serve the generated swagger.json/yaml + UI assets from the swagger/ folder
+	if beego.BConfig.RunMode == "dev" {
+		beego.SetStaticPath("/swagger", "swagger")
+	}
+
+	//start server
 	beego.Run()
 }

@@ -1,0 +1,314 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Rental Property API",
+        "description": "REST API for browsing and filtering rental properties.\n",
+        "version": "1.0.0",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/properties/": {
+            "get": {
+                "tags": [
+                    "properties"
+                ],
+                "description": "Returns a filtered list of rental properties. All query params are optional and can be combined.\n\u003cbr\u003e",
+                "operationId": "PropertyController.Get All Properties",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "min_price",
+                        "description": "Minimum price (USD)",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "max_price",
+                        "description": "Maximum price (USD)",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "min_star_rating",
+                        "description": "Minimum star rating",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "min_review_score",
+                        "description": "Minimum review score",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "min_reviews",
+                        "description": "Minimum number of reviews",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "published",
+                        "description": "Filter by published status",
+                        "type": "boolean"
+                    },
+                    {
+                        "in": "query",
+                        "name": "property_type",
+                        "description": "One of Hotel, House, Apartment, Villa, Resort, Hostel",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "feed",
+                        "description": "One of 11, 12, 22, 24",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "min_bedroom",
+                        "description": "Minimum number of bedrooms",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "amenities",
+                        "description": "Comma-separated list, e.g. wifi,pool",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Maximum number of results to return",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.PropertyListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid query parameter(s), see the Error field for details"
+                    },
+                    "500": {
+                        "description": "failed to load property data"
+                    }
+                }
+            }
+        },
+        "/properties/{id}": {
+            "get": {
+                "tags": [
+                    "properties"
+                ],
+                "description": "Returns one rental property matching the given ID.\n\u003cbr\u003e",
+                "operationId": "PropertyController.Get A Property",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "Property ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.PropertyResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "id is not provided"
+                    },
+                    "404": {
+                        "description": "property not found"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Counts": {
+            "title": "Counts",
+            "type": "object",
+            "properties": {
+                "Bathroom": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Bedroom": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Occupancy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Reviews": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.GeoInfo": {
+            "title": "GeoInfo",
+            "type": "object",
+            "properties": {
+                "Breadcrumbs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "City": {
+                    "type": "string"
+                },
+                "Country": {
+                    "type": "string"
+                },
+                "CountryCode": {
+                    "type": "string"
+                },
+                "Lat": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "LocationID": {
+                    "type": "string"
+                },
+                "Lon": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "State": {
+                    "type": "string"
+                },
+                "StateAbbr": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ImageInfo": {
+            "title": "ImageInfo",
+            "type": "object",
+            "properties": {
+                "Count": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "models.PropertyInfo": {
+            "title": "PropertyInfo",
+            "type": "object",
+            "properties": {
+                "Amenities": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Counts": {
+                    "$ref": "#/definitions/models.Counts"
+                },
+                "Image": {
+                    "$ref": "#/definitions/models.ImageInfo"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "PropertyType": {
+                    "type": "string"
+                },
+                "ReviewScore": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "Slug": {
+                    "type": "string"
+                },
+                "StarRating": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.PropertyListResponse": {
+            "title": "PropertyListResponse",
+            "type": "object",
+            "properties": {
+                "Result": {
+                    "$ref": "#/definitions/models.PropertyResult"
+                }
+            }
+        },
+        "models.PropertyResponseDTO": {
+            "title": "PropertyResponseDTO",
+            "type": "object",
+            "properties": {
+                "Feed": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "GeoInfo": {
+                    "$ref": "#/definitions/models.GeoInfo"
+                },
+                "ID": {
+                    "type": "string"
+                },
+                "Property": {
+                    "$ref": "#/definitions/models.PropertyInfo"
+                },
+                "Published": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.PropertyResult": {
+            "title": "PropertyResult",
+            "type": "object",
+            "properties": {
+                "Count": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.PropertyResponseDTO"
+                    }
+                }
+            }
+        }
+    }
+}
